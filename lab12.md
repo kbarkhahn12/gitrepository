@@ -1,10 +1,15 @@
-Problem Set 1
-There is a longstanding story that Triassic Diapsids outcompeted Triassic Syanpsids. Let's see if Triassic Diapsids were more likley to survive the Traissic/Jurassic extinction than Synapsids.
-Question 1
-Download four data sets from the paleobiology database. First, a dataset of Anisian-Rhaetian Synapsids, name it TriassicSynapsids. Second, a dataset of Anisian-Rhaetian Diapsids, name it TriassicDiapsids. Third, a dataset of post-Triassic Diapsids, name it JurassicDiapsids. Fourth, a dataset of post-Triassic Synapsids, name it JurassicSynapsids. Show your code.
-Hint:
-* Use the formal terms Diapsida and Synapsida when downloading the data.
+> 20/20
 
+## Problem Set 1
+There is a longstanding story that Triassic Diapsids outcompeted Triassic Syanpsids. Let's see if Triassic Diapsids were more likley to survive the Traissic/Jurassic extinction than Synapsids.
+
+Question 1
+
+Download four data sets from the paleobiology database. First, a dataset of Anisian-Rhaetian Synapsids, name it TriassicSynapsids. Second, a dataset of Anisian-Rhaetian Diapsids, name itÂ TriassicDiapsids. Third, a dataset of post-Triassic Diapsids, name itÂ JurassicDiapsids. Fourth, a dataset of post-Triassic Synapsids, name itÂ JurassicSynapsids. Show your code.
+Hint:
+* Use the formal termsÂ DiapsidaÂ andÂ SynapsidaÂ when downloading the data.
+
+````R
 > TriassicSynapsids<-downloadPBDB("Synapsida","Anisian","Rhaetian")
 > JurassicSynapsids<-downloadPBDB("Synapsida","Jurassic","Neogene")
 > TriassicDiapsids<-downloadPBDB("Diapsida","Anisian","Rhaetian")
@@ -13,26 +18,30 @@ Hint:
 > JurassicSynapsids<-cleanRank(JurassicSynapsids,"genus")
 > TriassicDiapsids<-cleanRank(TriassicDiapsids,"genus")
 > JurassicDiapsids<-cleanRank(JurassicDiapsids,"genus")
+````
 
 Question 2
+
 How many Diapsid genera were there in the Triassic dataset? How many Synapsid genera? Show your code.
 Hint:
 * Remember, there is a difference between the number of genera and the number of occurrences.
 * Don't forget to clean up the genus names!
 
+````R
 > TriassicDiapsidGenera<-unique(TriassicDiapsids[,"genus"])
 389 total genera
 > TriassicSynapsidsGenera<-unique(TriassicSynapsids[,"genus"])
 116 total genera
 
-
 > JurassicSynapsidGenera<-unique(JurassicSynapsids[,"genus"])
 > JurassicDiapsidGenera<-unique(JurassicDiapsids[,"genus"])
+````
 
 Question 3
+
 How many Triassic Diapsid genera survived the Triassic/Jurassic transition? How many were victims? How many Triassic Synapsid genera survived the Triassic/Jurassic Transition? How many were victims? Show your code.
 
-
+````R
 > TriassicDiapsidSurvivors<-intersect(TriassicDiapsidGenera,unique(JurassicDiapsidGenera))
 37 diapsid survivors
 > TriassicSynapsidSurvivors<-intersect(TriassicSynapsidsGenera,unique(JurassicSynapsidGenera))
@@ -45,6 +54,7 @@ How many Triassic Diapsid genera survived the Triassic/Jurassic transition? How 
 Question 4
 Calculate the odds ratio and log-odds that Diapsid genera were more likely to survive the T/J transition than Synapsids
 
+````R
 > DiapsidOdds<-(length(TriassicDiapsidSurvivors)/length(TriassicDiapsidGenera))/(length(DiapsidVictims)/length(TriassicDiapsidGenera))
 > SynapsidOdds<-(length(TriassicSynapsidSurvivors)/length(TriassicSynapsidsGenera))/(length(SynapsidVictims)/length(TriassicSynapsidsGenera))
 > OddsRatio<-DiapsidOdds/SynapsidOdds
@@ -52,9 +62,11 @@ Calculate the odds ratio and log-odds that Diapsid genera were more likely to su
 [1] 1.249684
 > log(OddsRatio)
 [1] 0.222891
+````
 
 Question 5
 Using a 95% confidence interval, can you say that this odds/ratio is "statistically significant"? Show your code.
+````R
 > StandardError<-sqrt(1/length(TriassicDiapsidSurvivors)+ 1/length(DiapsidVictims) + 1/length(TriassicSynapsidSurvivors)+ 1/length(SynapsidVictims))
 > StandardError
 [1] 0.3877175
@@ -64,23 +76,25 @@ Using a 95% confidence interval, can you say that this odds/ratio is "statistica
 > LowerLimit<-log(OddsRatio) - (StandardError*1.96)
 > LowerLimit
 [1] -0.5370353
-
+````
 No, this is not significantly significant because the lower limit is negative. 
 
-Problem Set 2
+## Problem Set 2
 Let's apply the technique that you just learned the Triassic and Jurassic Diapsids and Synapsids.
 Queston 1
 Download a dataset of Anisian-Rhaetian Diapsids and Synapsids, and a dataset of post-Triassic Diapsids and Synapsids. Show your code.
+````R
 > TriassicSynapandDiap<-downloadPBDB(c("Synapsida","Diapsida"),"Anisian","Rhaetian")
 
 > JurassicSynapandDiap<-downloadPBDB(c("Synapsida","Diapsida"),"Jurassic","Neogene")
 > TriassicSynapandDiap<-cleanRank(TriassicSynapandDiap,"genus")
 > JurassicSynapandDiap<-cleanRank(JurassicSynapandDiap,"genus")
-
+````
 
 Question 2
 Find the mean latitude of each genus's occurrences in your Triassic dataset. Show your code.
 
+````R
 > MeanLatitudes<-tapply(TriassicSynapandDiap[,"paleolat"],TriassicSynapandDiap[,"genus"],mean)
 > head(MeanLatitudes)
 Acaenasuchus  10.116
@@ -89,25 +103,27 @@ Acompsosaurus   10.740
 Actiosaurus 32.120
 Adamanasuchus 10.145
 Adelobasileus 10.170
-      
+```` 
 
 Question 3
 Find which Triassic genera were survivors and which were victims of the Triassic/Jurassic event. Show your code.
+````R
 > SynapandDiapSurvivors<-subset(TriassicSynapandDiap,TriassicSynapandDiap[,"genus"]%in%unique(JurassicSynapandDiap[,"genus"])==TRUE)
 > SynapandDiapSurvivors<-unique(SynapandDiapSurvivors[,"genus"])
 > head(SynapandDiapSurvivors)
 [1] "Clevosaurus"        "Grallator"          "Rhynchosauroides"   "Rotodactylus"      
 [5] "Brachychirotherium" "Coelurosaurichnus" 
 
-
 > SynapandDiapVictims<-subset(TriassicSynapandDiap,TriassicSynapandDiap[,"genus"]%in%unique(JurassicSynapandDiap[,"genus"])!=TRUE)
 > SynapandDiapVictims<-unique(SynapandDiapVictims[,"genus"])
 > head(SynapandDiapVictims)
 [1] "Icarosaurus"      "Rutiodon"         "Kuehneosuchus"    "Kuehneosaurus"   
 [5] "Trilophosaurus"   "Diphydontosaurus"
+````
 
 Question 4
 Find which genera of your Triassic dataset were Diapsids and which were Synapsids. Show your code.
+````R
 > Vector<-subset(TriassicSynapandDiap,TriassicSynapandDiap[,"genus"]%in%TriassicSynapsids[,"genus"]==TRUE)
 > SynapVector<-unique(Vector[,"genus"])
 > SynapVector
@@ -115,8 +131,12 @@ Find which genera of your Triassic dataset were Diapsids and which were Synapsid
 > Vector2<-subset(TriassicSynapandDiap,TriassicSynapandDiap[,"genus"]%in%TriassicDiapsids[,"genus"]==TRUE)
 > DiapVector<-unique(Vector2[,"genus"])
 389 Diapsid genera
+````
+
 Question 5
+
 Perform a logistic regression where the outcome variable is Survivor/Victim and the input variable is the mean latitude of each genus. Show your code. Was the mean latitude of a Triassic genus a good predictor of its survival across the T/J extinction?
+````R
 > Victims<-array(0,dim=length(SynapandDiapVictims),dimnames=list(SynapandDiapVictims))
 > head(Victims)
      Icarosaurus         Rutiodon    Kuehneosuchus    Kuehneosaurus   Trilophosaurus 
@@ -167,7 +187,7 @@ Coefficients:
 (Intercept)                    -2.3009122  0.1547326  -14.87   <2e-16 ***
 FinalMatrix[, "MeanLatitudes"]  0.0007725  0.0051555    0.15    0.881    
 ---
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+Signif. codes:  0 â€˜***â€™ 0.001 â€˜**â€™ 0.01 â€˜*â€™ 0.05 â€˜.â€™ 0.1 â€˜ â€™ 1
 
 (Dispersion parameter for binomial family taken to be 1)
 
@@ -176,6 +196,6 @@ Residual deviance: 308.08  on 503  degrees of freedom
 AIC: 312.08
 
 Number of Fisher Scoring iterations: 5
-
+````
 
 NO.
